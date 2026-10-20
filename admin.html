@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control | Arequipa Hands-On</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        body { background-color: #F4F8FA; padding: 20px; }
+        .admin-container { max-width: 1050px; margin: 0 auto; }
+        .admin-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 25px; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: var(--sombra-card); 
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .login-box { max-width: 400px; margin: 80px auto; background: white; padding: 30px; border-radius: 16px; box-shadow: var(--sombra-card); text-align: center; }
+        .table-responsive { background: white; border-radius: 12px; overflow-x: auto; box-shadow: var(--sombra-card); }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th, td { padding: 14px 18px; border-bottom: 1px solid var(--gris-borde); vertical-align: top; }
+        th { background: #1E4B6E; color: white; font-weight: 700; }
+        .badge-status { padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 12px; display: inline-block; }
+        .badge-sin-confirmar { background: #FDEBD0; color: #B9770E; }
+        .badge-confirmado { background: #D4EFDF; color: #1E8449; }
+        .btn-confirm { background: #27AE60; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+        .btn-confirm:hover { background: #219150; }
+        .filter-box { display: flex; align-items: center; gap: 10px; background: #EBF5FB; padding: 10px 15px; border-radius: 8px; font-weight: 700; font-size: 13px; color: var(--azul-colonial); }
+        .filter-box input { width: 16px; height: 16px; accent-color: var(--rojo-carmesi); cursor: pointer; }
+        .pasajeros-lista { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+        .pasajeros-lista li { margin-bottom: 4px; color: var(--texto-oscuro); }
+        .count-badge { background: var(--amarillo-ocre); color: white; padding: 2px 8px; border-radius: 10px; font-weight: 800; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+<!-- VISTA 1: LOGIN -->
+<div id="loginSection" class="login-box">
+    <i class="fa-solid fa-user-shield" style="font-size: 40px; color: var(--rojo-carmesi); margin-bottom: 15px;"></i>
+    <h3 style="color: var(--rojo-carmesi); margin-bottom: 10px;">Acceso Administrador</h3>
+    <p style="font-size: 13px; color: var(--texto-suave); margin-bottom: 20px;">Ingresa la clave para gestionar reservas</p>
+    <input type="password" id="adminPass" class="form-control" placeholder="Contraseña de acceso" style="margin-bottom: 15px; text-align: center;">
+    <button id="btnLogin" class="btn-cta" style="margin-top: 0;">Ingresar al Panel</button>
+</div>
+
+<!-- VISTA 2: PANEL DE GESTIÓN -->
+<div id="adminPanel" class="admin-container" style="display: none;">
+    <div class="admin-header">
+        <div>
+            <h2 style="color: var(--rojo-carmesi);"><i class="fa-solid fa-list-check"></i> Gestión de Grupos / Reservas</h2>
+            <p style="font-size: 13px; color: var(--texto-suave);">Confirma el pago del grupo completo con un solo clic</p>
+        </div>
+        
+        <label class="filter-box">
+            <input type="checkbox" id="checkMostrarTodos">
+            <span>Mostrar también confirmados</span>
+        </label>
+    </div>
+
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha Salida</th>
+                    <th>Titular de la Compra</th>
+                    <th>Pasajeros del Grupo</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="tablaReservas">
+                <tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando reservas...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const SUPABASE_URL = "https://yzyrvvcdnhjlkmgulgjh.supabase.co"; 
+    const SUPABASE_KEY = "sb_publishable_UEbVumaJxsoq6cy6T6rceA_CY0VAx4k"; 
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const CLAVE_ADMIN = "arequipa2026";
+
+    document.getElementById('btnLogin').addEventListener('click', () => {
+        const pass = document.getElementById('adminPass').value;
+        if (pass === CLAVE_ADMIN) {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            cargarReservas();
+        } else {
+            alert("Contraseña incorrecta");
+        }
+    });
+
+    document.getElementById('checkMostrarTodos').addEventListener('change', cargarReservas);
+
+    async function cargarReservas() {
+        const tbody = document.getElementById('tablaReservas');
+        const mostrarTodos = document.getElementById('checkMostrarTodos').checked;
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 30px;">Cargando...</td></tr>';
+
+        try {
+            let { data, error } = await supabase
+                .from('pasajeros_reservas')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 25px;">No hay reservas registradas.</td></tr>';
+                return;
+            }
+
+            // AGROUPAR FILAS POR TITULAR + FECHA
+            const grupos = {};
+            data.forEach(item => {
+                const claveGrupo = `${item.fecha_tour}_${item.dni_registrante}`;
+                if (!grupos[claveGrupo]) {
+                    grupos[claveGrupo] = {
+                        fecha_tour: item.fecha_tour,
+                        dni_registrante: item.dni_registrante,
+                        celular_registrante: item.celular_registrante,
+                        pasajeros: [],
+                        ids: [],
+                        todosConfirmados: true,
+                        algunoPendiente: false
+                    };
+                }
+                
+                grupos[claveGrupo].pasajeros.push(item);
+                grupos[claveGrupo].ids.push(item.id);
+
+                if (item.estado === 'Confirmado') {
+                    // tiene al menos uno confirmado
+                } else {
+                    grupos[claveGrupo].todosConfirmados = false;
+                    grupos[claveGrupo].algunoPendiente = true;
+                }
+            });
+
+            tbody.innerHTML = '';
+            let filasMostradas = 0;
+
+            Object.values(grupos).forEach(grupo => {
+                // Filtro: Si no quiere ver confirmados y el grupo ya está 100% confirmado, se salta
+                if (!mostrarTodos && grupo.todosConfirmados) {
+                    return;
+                }
+
+                filasMostradas++;
+                const tr = document.createElement('tr');
+                const esConfirmado = grupo.todosConfirmados;
+
+                // Crear lista HTML de acompañantes
+                const listaHtml = grupo.pasajeros.map(p => 
+                    `<li>👤 <strong>${p.nombre}</strong> (DNI: ${p.dni_pasajero})</li>`
+                ).join('');
+
+                const idsString = grupo.ids.join(',');
+
+                tr.innerHTML = `
+                    <td><strong>${grupo.fecha_tour}</strong></td>
+                    <td>
+                        <strong>DNI: ${grupo.dni_registrante}</strong><br>
+                        <small style="color:#666;"><i class="fa-solid fa-phone"></i> Cel: ${grupo.celular_registrante}</small>
+                    </td>
+                    <td>
+                        <span class="count-badge">${grupo.pasajeros.length} Pasajero(s)</span>
+                        <ul class="pasajeros-lista" style="margin-top: 8px;">
+                            ${listaHtml}
+                        </ul>
+                    </td>
+                    <td>
+                        <span class="badge-status ${esConfirmado ? 'badge-confirmado' : 'badge-sin-confirmar'}">
+                            ${esConfirmado ? 'Confirmado' : 'Pendiente'}
+                        </span>
+                    </td>
+                    <td>
+                        ${!esConfirmado ? 
+                            `<button class="btn-confirm" onclick="confirmarGrupo('${idsString}', '${grupo.fecha_tour}',${grupo.pasajeros.length})">
+                                <i class="fa-solid fa-check-double"></i> Confirmar Grupo (${grupo.pasajeros.length})
+                             </button>` : 
+                            '<span style="color: #27AE60; font-weight:700;"><i class="fa-solid fa-circle-check"></i> Listo</span>'
+                        }
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (filasMostradas === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 25px; font-weight:700; color:var(--azul-colonial);">🎉 ¡No hay grupos pendientes por confirmar!</td></tr>';
+            }
+
+        } catch (e) {
+            console.error(e);
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Error al cargar datos.</td></tr>';
+        }
+    }
+
+    window.confirmarGrupo = async function(idsString, fechaTour, totalPasajeros) {
+        if (!confirm(`¿Confirmas que recibiste el pago completo para los ${totalPasajeros} pasajero(s) de esta reserva?`)) return;
+
+        const idsArray = idsString.split(',').map(id => parseInt(id, 10));
+
+        try {
+            // 1. Cambiar estado a Confirmado para TODOS los IDs del grupo
+            const { error: err1 } = await supabase
+                .from('pasajeros_reservas')
+                .update({ estado: 'Confirmado' })
+                .in('id', idsArray);
+
+            if (err1) throw err1;
+
+            // 2. Extraer fecha ISO YYYY-MM-DD
+            const isoFecha = fechaTour.split(' ')[0];
+
+            // 3. Sumar el total de pasajeros del grupo a los asientos ocupados
+            let { data: salida } = await supabase
+                .from('salidas_programadas')
+                .select('asientos_ocupados')
+                .eq('fecha_tour', isoFecha)
+                .maybeSingle();
+
+            if (salida) {
+                const nuevosOcupados = (salida.asientos_ocupados || 0) + totalPasajeros;
+                await supabase
+                    .from('salidas_programadas')
+                    .update({ asientos_ocupados: nuevosOcupados })
+                    .eq('fecha_tour', isoFecha);
+            }
+
+            alert(`✅ ¡Grupo de ${totalPasajeros} pasajero(s) confirmado exitosamente!`);
+            cargarReservas();
+
+        } catch (e) {
+            console.error("Error al confirmar grupo:", e);
+            alert("Ocurrió un error al actualizar la reserva.");
+        }
+    };
+</script>
+</body>
+</html>
