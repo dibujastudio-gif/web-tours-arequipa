@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Personal | Arequipa Hands-On Tours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        body {
+            background-color: #F4F8FA;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .portal-card {
+            background: white;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: var(--sombra-card);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .role-btn {
+            background: #FAF9F6;
+            border: 2px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 20px 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .role-btn:hover, .role-btn.active {
+            border-color: var(--rojo-carmesi);
+            background: #FDF2F4;
+        }
+
+        .role-btn i {
+            font-size: 32px;
+            color: var(--azul-colonial);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .role-btn.active i {
+            color: var(--rojo-carmesi);
+        }
+
+        .role-btn span {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--texto-oscuro);
+            display: block;
+        }
+
+        .form-pass {
+            margin-top: 20px;
+        }
+
+        .input-pass {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portal-card">
+    <div style="color: var(--rojo-carmesi); font-size: 24px; font-weight: 800; margin-bottom: 5px;">
+        <i class="fa-solid fa-hands-holding-circle" style="color: var(--amarillo-ocre);"></i>
+        Arequipa Hands-On
+    </div>
+    <p style="font-size: 13px; color: var(--texto-suave);">Acceso exclusivo para el equipo de trabajo</p>
+
+    <div class="roles-grid">
+        <div class="role-btn" id="btnRoleAdmin" onclick="seleccionarRol('admin')">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Administrador</span>
+        </div>
+        <div class="role-btn" id="btnRoleGuia" onclick="seleccionarRol('guia')">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>Guía / Transporte</span>
+        </div>
+    </div>
+
+    <!-- CASILLA DE CONTRASEÑA -->
+    <div id="sectionPass" class="form-pass" style="display: none;">
+        <p id="lblRol" style="font-size: 12px; font-weight: 700; color: var(--azul-colonial); margin-bottom: 8px;"></p>
+        <input type="password" id="txtPass" class="input-pass" placeholder="Ingresa la contraseña" onkeypress="evaluarEnter(event)">
+        <button onclick="iniciarSesion()" class="btn-cta" style="width: 100%; margin-top: 0;">
+            Ingresar al Portal
+        </button>
+    </div>
+</div>
+
+<script>
+    let rolSeleccionado = '';
+
+    const CLAVE_ADMIN = "arequipa2026";
+    const CLAVE_GUIA = "guia2026";
+
+    function seleccionarRol(rol) {
+        rolSeleccionado = rol;
+        
+        document.getElementById('btnRoleAdmin').classList.remove('active');
+        document.getElementById('btnRoleGuia').classList.remove('active');
+        document.getElementById('sectionPass').style.display = 'block';
+
+        if (rol === 'admin') {
+            document.getElementById('btnRoleAdmin').classList.add('active');
+            document.getElementById('lblRol').innerText = "Ingresando como: ADMINISTRADOR";
+        } else {
+            document.getElementById('btnRoleGuia').classList.add('active');
+            document.getElementById('lblRol').innerText = "Ingresando como: GUÍA DE TURISMO";
+        }
+
+        document.getElementById('txtPass').value = '';
+        document.getElementById('txtPass').focus();
+    }
+
+    function evaluarEnter(e) {
+        if (e.key === 'Enter') {
+            iniciarSesion();
+        }
+    }
+
+    function iniciarSesion() {
+        const pass = document.getElementById('txtPass').value;
+
+        if (rolSeleccionado === 'admin') {
+            if (pass === CLAVE_ADMIN) {
+                window.location.href = 'admin.html';
+            } else {
+                alert("Contraseña de Administrador incorrecta.");
+            }
+        } else if (rolSeleccionado === 'guia') {
+            if (pass === CLAVE_GUIA) {
+                window.location.href = 'guia.html';
+            } else {
+                alert("Contraseña de Guía incorrecta.");
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
