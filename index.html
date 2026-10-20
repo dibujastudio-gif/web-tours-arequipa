@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arequipa Hands-On Tours | Turismo con Propósito</title>
+    <!-- Google Fonts & FontAwesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --rojo-carmesi: #8B1E2B;
+            --blanco-sillar: #FCFBF9;
+            --azul-colonial: #1E4B6E;
+            --amarillo-ocre: #D9822B;
+            --amarillo-ocre-hover: #BF6F1F;
+            --texto-oscuro: #2C221E;
+            --texto-suave: #635853;
+            --gris-borde: #E6E1DA;
+            --sombra-suave: 0 10px 30px -5px rgba(139, 30, 43, 0.08);
+            --sombra-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--blanco-sillar);
+            color: var(--texto-oscuro);
+            line-height: 1.6;
+        }
+
+        /* --- NAVBAR --- */
+        header {
+            background-color: rgba(252, 251, 249, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--gris-borde);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 20px;
+            color: var(--rojo-carmesi);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo i { font-size: 24px; color: var(--amarillo-ocre); }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            list-style: none;
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: none;
+            padding: 8px 16px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--texto-suave);
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            color: var(--rojo-carmesi);
+            background-color: rgba(139, 30, 43, 0.1);
+        }
+
+        /* --- HERO --- */
+        .hero {
+            background: linear-gradient(rgba(30, 75, 110, 0.75), rgba(139, 30, 43, 0.85)), url('https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 { font-size: 42px; font-weight: 800; margin-bottom: 15px; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 50px 20px; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .section-title { text-align: center; margin-bottom: 40px; }
+        .section-title h2 { font-size: 32px; color: var(--rojo-carmesi); font-weight: 800; }
+
+        /* TOURS GRID */
+        .tours-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .tour-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--sombra-card);
+            border: 1px solid var(--gris-borde);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tour-img { height: 200px; width: 100%; object-fit: cover; }
+        .tour-body { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .tour-badge { background: rgba(30, 75, 110, 0.1); color: var(--azul-colonial); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-bottom: 12px; align-self: flex-start; }
+        .tour-title { font-size: 20px; color: var(--rojo-carmesi); margin-bottom: 12px; font-weight: 700; }
+        .tour-list { list-style: none; margin-bottom: 20px; font-size: 14px; color: var(--texto-suave); }
+        .tour-list li { margin-bottom: 8px; display: flex; gap: 8px; }
+        .tour-price { font-size: 22px; font-weight: 800; color: var(--rojo-carmesi); }
+
+        /* FORMULARIO DE RESERVA COMPLETO */
+        .booking-banner {
+            background: linear-gradient(135deg, white, #FAF6F0);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: var(--sombra-suave);
+            border: 2px solid var(--amarillo-ocre);
+            max-width: 720px;
+            margin: 0 auto;
+        }
+
+        .booking-header { text-align: center; margin-bottom: 25px; }
+        .booking-header h3 { font-size: 26px; color: var(--rojo-carmesi); font-weight: 800; }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 700; font-size: 14px; color: var(--azul-colonial); margin-bottom: 8px; }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--gris-borde);
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            background: white;
+        }
+
+        .titular-box {
+            background: #F4F8FA;
+            border: 2px dashed var(--azul-colonial);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .titular-title {
+            font-weight: 800;
+            color: var(--azul-colonial);
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--gris-borde);
+            margin-top: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--texto-oscuro);
+            font-size: 14px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--amarillo-ocre);
+            cursor: pointer;
+        }
+
+        .pasajeros-container {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .pasajero-box {
+            background: #FFFFFF;
+            border: 1px solid var(--gris-borde);
+            border-left: 5px solid var(--amarillo-ocre);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .pasajero-title {
+            font-weight: 800;
+            color: var(--rojo-carmesi);
+            margin-bottom: 15px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-cta {
+            background-color: var(--amarillo-ocre);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .btn-cta:disabled { background-color: #D6D1CA; cursor: not-allowed; }
+
+        .info-status { font-size: 13px; margin-top: 10px; font-weight: 700; text-align: center; }
+
+        footer { background-color: var(--texto-oscuro); color: white; text-align: center; padding: 30px 20px; margin-top: 60px; font-size: 14px; }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .booking-banner { padding: 25px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="#" class="logo">
+            <i class="fa-solid fa-hands-holding-circle"></i>
+            Arequipa Hands-On
+        </a>
+        <ul class="nav-links">
+            <li><button class="nav-tab active" onclick="switchTab('tours')">Tours Disponibles</button></li>
+            <li><button class="nav-tab" onclick="switchTab('nosotros')">¿Quiénes Somos?</button></li>
+        </ul>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Explora Arequipa con Ojos Jóvenes y Manos Artesanas</h1>
+        <p>Experiencias vivenciales, cultura viva e impacto social directo en la Ciudad Blanca.</p>
+    </div>
+</section>
+
+<div class="container">
+    <section id="tab-tours" class="tab-content active">
+        <div class="section-title">
+            <h2>Nuestras Experiencias Oficiales</h2>
+            <p>Selecciona tu tour preferido y separa tus lugares al instante</p>
+        </div>
+
+        <div class="tours-grid">
+            <div class="tour-card">
+                <img src="https://res.cloudinary.com/cwjn3bq6/image/upload/f_auto,q_auto/Gemini_Generated_Image_xufbxkxufbxkxufb" alt="Ruta del Sillar" class="tour-img">
+                <div class="tour-body">
+                    <span class="tour-badge"><i class="fa-regular fa-calendar"></i> Martes y Sábados</span>
+                    <h3 class="tour-title">Ruta del Sillar + Taller de Pintura</h3>
+                    <ul class="tour-list">
+                        <li><i class="fa-solid fa-location-dot"></i> <strong>Itinerario:</strong> Canteras de Añashuayco y caminata por Culebrillas.</li>
+                        <li><i class="fa-solid fa-palette"></i> <strong>Actividad Especial:</strong> Taller para pintar tu propia réplica miniatura.</li>
+                    </ul>
+                    <div class="tour-footer"><span class="tour-price">S/. 55.00</span></div>
+                </div>
+            </div>
+
+            <div class="tour-card">
+                <img src="https://res.cloudinary.com/cwjn3bq6/image/upload/v1792481282/Gemini_Generated_Image_7z0av57z0av57z0a.jpg" alt="City Tour Peatonal" class="tour-img">
+                <div class="tour-body">
+                    <span class="tour-badge"><i class="fa-regular fa-calendar"></i> Jueves por la mañana</span>
+                    <h3 class="tour-title">City Tour Peatonal Histórico</h3>
+                    <ul class="tour-list">
+                        <li><i class="fa-solid fa-location-dot"></i> <strong>Itinerario:</strong> Plaza de Armas, Claustros y San Lázaro.</li>
+                        <li><i class="fa-solid fa-gift"></i> <strong>Actividad Especial:</strong> Llavero artesanal del Misti.</li>
+                    </ul>
+                    <div class="tour-footer"><span class="tour-price">S/. 40.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FORMULARIO DE RESERVA -->
+        <div class="booking-banner">
+            <div class="booking-header">
+                <h3>¡Reserva tu próximo tour!</h3>
+                <p style="color: var(--texto-suave); font-size: 14px;">Ingresa los datos para la ficha oficial</p>
+            </div>
+
+            <div class="form-group">
+                <label for="fecha"><i class="fa-regular fa-calendar-check"></i> 1. Selecciona tu fecha disponible:</label>
+                <select id="fecha" class="form-control">
+                    <option value="">-- Cargando fechas... --</option>
+                </select>
+                <div id="status" class="info-status"></div>
+            </div>
+
+            <!-- SECCIÓN DEL TITULAR DE LA COMPRA -->
+            <div class="titular-box">
+                <div class="titular-title">
+                    <i class="fa-solid fa-user-gear"></i> Datos de la Persona que Realiza la Reserva (Titular)
+                </div>
+                <div class="form-group">
+                    <label>Nombre Completo del Titular:</label>
+                    <input type="text" id="titularNombre" class="form-control" placeholder="Ej: Jasmine Espinoza" required>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>DNI / Pasaporte Titular:</label>
+                        <input type="text" id="titularDni" class="form-control" placeholder="Ej: 72528389" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Celular Titular:</label>
+                        <input type="tel" id="titularCelular" class="form-control" placeholder="Ej: 988770090" required>
+                    </div>
+                </div>
+
+                <label class="checkbox-container">
+                    <input type="checkbox" id="checkTitularVa" checked>
+                    <span>¿El titular también asistirá al tour como pasajero?</span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="pasajeros"><i class="fa-solid fa-users"></i> 2. Número de Pasajeros que irán al Tour:</label>
+                <input type="number" id="pasajeros" class="form-control" min="1" max="10" value="1">
+            </div>
+
+            <!-- CONTENEDOR DINÁMICO DE OTROS PASAJEROS -->
+            <div id="pasajerosInputs" class="pasajeros-container"></div>
+
+            <button id="btnCotizar" class="btn-cta" disabled>
+                <i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Enviar Ficha por WhatsApp
+            </button>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>© 2026 Arequipa Hands-On Tours. Todos los derechos reservados.</p>
+</footer>
+
+<!-- SCRIPT CONECTADO A SUPABASE -->
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+
+    const SUPABASE_URL = "https://yzyrvvcdnhjlkmgulgjh.supabase.co"; 
+    const SUPABASE_KEY = "sb_publishable_UEbVumaJxsoq6cy6T6rceA_CY0VAx4k"; 
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+    let asientosDisponibles = 0;
+
+    window.switchTab = function(tabName) {
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tab-${tabName}`).classList.add('active');
+        event.currentTarget.classList.add('active');
+    };
+
+    // GENERAR CAMPOS DE PASAJEROS SEGÚN EL CHECKBOX Y NÚMERO
+    function renderizarCamposPasajeros() {
+        const totalPasajeros = parseInt(document.getElementById('pasajeros').value, 10) || 1;
+        const titularAsiste = document.getElementById('checkTitularVa').checked;
+        const container = document.getElementById('pasajerosInputs');
+        container.innerHTML = '';
+
+        // Si el titular asiste, él ya cuenta como el Pasajero 1
+        const otrosPasajerosAImprimir = titularAsiste ? totalPasajeros - 1 : totalPasajeros;
+
+        if (titularAsiste) {
+            const infoBox = document.createElement('div');
+            infoBox.style.cssText = "background:#EBF5FB; padding:12px; border-radius:8px; font-size:13px; color:#1E4B6E; font-weight:700;";
+            infoBox.innerHTML = `ℹ️ Pasajero 1: <strong>Titular (Se usarán los datos ingresados arriba)</strong>`;
+            container.appendChild(infoBox);
+        }
+
+        for (let i = 1; i <= otrosPasajerosAImprimir; i++) {
+            const numeroPasajeroEtiqueta = titularAsiste ? (i + 1) : i;
+            const box = document.createElement('div');
+            box.className = 'pasajero-box';
+
+            box.innerHTML = `
+                <div class="pasajero-title">
+                    <i class="fa-solid fa-user"></i> Pasajero ${numeroPasajeroEtiqueta}
+                </div>
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" class="form-control input-nombre" placeholder="Ej: Nombre de acompañante" required>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>DNI / Pasaporte:</label>
+                        <input type="text" class="form-control input-dni" placeholder="Ej: 72889512" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Celular (Opcional):</label>
+                        <input type="tel" class="form-control input-celular" placeholder="Ej: 937294639">
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Nacionalidad:</label>
+                    <input type="text" class="form-control input-nacionalidad" value="Peruana">
+                </div>
+            `;
+            container.appendChild(box);
+        }
+    }
+
+    // CARGAR FECHAS
+    async function cargarFechasDisponibles() {
+        const selectFecha = document.getElementById('fecha');
+        const hoy = new Date().toISOString().split('T')[0];
+
+        try {
+            let { data } = await supabase
+                .from('salidas_programadas')
+                .select('fecha_tour, limite_asientos, asientos_ocupados')
+                .gte('fecha_tour', hoy)
+                .order('fecha_tour', { ascending: true });
+
+            selectFecha.innerHTML = '<option value="">-- Selecciona un día --</option>';
+
+            if (data && data.length > 0) {
+                data.forEach(item => {
+                    const disp = item.limite_asientos - item.asientos_ocupados;
+                    if (disp > 0) {
+                        const dateObj = new Date(item.fecha_tour + 'T00:00:00');
+                        const diaSemana = dateObj.toLocaleDateString('es-ES', { weekday: 'long' });
+                        const diaMes = dateObj.getDate();
+                        const mesNombre = dateObj.toLocaleDateString('es-ES', { month: 'short' });
+
+                        let tourNombre = "Salida Especial";
+                        if (diaSemana.includes("mar") || diaSemana.includes("sáb") || diaSemana.includes("sab")) {
+                            tourNombre = "Ruta del Sillar";
+                        } else if (diaSemana.includes("jue")) {
+                            tourNombre = "City Tour Peatonal";
+                        }
+
+                        const opt = document.createElement('option');
+                        opt.value = `${item.fecha_tour} ${diaSemana.substring(0,3)} ${tourNombre.toLowerCase()}`;
+                        opt.textContent = `${capitalizar(diaSemana)} ${diaMes} ${capitalizar(mesNombre)} - ${tourNombre}`;
+                        selectFecha.appendChild(opt);
+                    }
+                });
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function capitalizar(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+
+    // VERIFICAR DISPONIBILIDAD
+    async function verificarDisponibilidad() {
+        const fechaVal = document.getElementById('fecha').value;
+        const statusDiv = document.getElementById('status');
+        const btn = document.getElementById('btnCotizar');
+        
+        if (!fechaVal) { statusDiv.innerText = ""; btn.disabled = true; return; }
+
+        const isoFecha = fechaVal.split(' ')[0];
+
+        try {
+            let { data } = await supabase
+                .from('salidas_programadas')
+                .select('asientos_ocupados, limite_asientos')
+                .eq('fecha_tour', isoFecha)
+                .maybeSingle();
+
+            asientosDisponibles = data ? (data.limite_asientos - data.asientos_ocupados) : 15;
+            validarPasajeros();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function validarPasajeros() {
+        const statusDiv = document.getElementById('status');
+        const btn = document.getElementById('btnCotizar');
+        const numPasajeros = parseInt(document.getElementById('pasajeros').value, 10);
+
+        if (numPasajeros > asientosDisponibles) {
+            statusDiv.innerText = `❌ Solo quedan ${asientosDisponibles} asientos disponibles para esa fecha.`;
+            statusDiv.style.color = "#8B1E2B";
+            btn.disabled = true;
+        } else {
+            statusDiv.innerText = `🟢 ¡Disponible! Cupos confirmados para ${numPasajeros} persona(s).`;
+            statusDiv.style.color = "#27ae60";
+            btn.disabled = false;
+        }
+    }
+
+    // REGISTRAR EN SUPABASE Y REDIRIGIR A WHATSAPP
+    async function guardarYEnviar() {
+        const fechaSelect = document.getElementById('fecha');
+        const tourTexto = fechaSelect.options[fechaSelect.selectedIndex].text;
+        const fechaValor = fechaSelect.value;
+
+        // Datos del Titular
+        const titularNombre = document.getElementById('titularNombre').value.trim();
+        const titularDni = document.getElementById('titularDni').value.trim();
+        const titularCelular = document.getElementById('titularCelular').value.trim();
+        const titularAsiste = document.getElementById('checkTitularVa').checked;
+
+        if (!titularNombre || !titularDni || !titularCelular) {
+            alert("Por favor completa todos los datos del Titular de la reserva.");
+            return;
+        }
+
+        const btn = document.getElementById('btnCotizar');
+        btn.disabled = true;
+        btn.innerText = "⏳ Registrando en base de datos...";
+
+        const filasInsertar = [];
+
+        // 1. Si el titular también asistirá, lo incluimos como pasajero oficial
+        if (titularAsiste) {
+            filasInsertar.push({
+                fecha_tour: fechaValor,
+                dni_registrante: titularDni,
+                celular_registrante: titularCelular,
+                dni_pasajero: titularDni,
+                celular: titularCelular,
+                nombre: titularNombre,
+                nacionalidad: 'Peruana',
+                estado: 'Sin confirmar'
+            });
+        }
+
+        // 2. Extraer el resto de acompañantes
+        const boxes = document.querySelectorAll('.pasajero-box');
+        boxes.forEach((box) => {
+            const nombre = box.querySelector('.input-nombre').value.trim();
+            const dni = box.querySelector('.input-dni').value.trim();
+            const celular = box.querySelector('.input-celular').value.trim();
+            const nacionalidad = box.querySelector('.input-nacionalidad').value.trim() || 'Peruana';
+
+            if (nombre && dni) {
+                filasInsertar.push({
+                    fecha_tour: fechaValor,
+                    dni_registrante: titularDni,
+                    celular_registrante: titularCelular,
+                    dni_pasajero: dni,
+                    celular: celular || 'N/A',
+                    nombre: nombre,
+                    nacionalidad: nacionalidad,
+                    estado: 'Sin confirmar'
+                });
+            }
+        });
+
+        try {
+            const { error } = await supabase
+                .from('pasajeros_reservas')
+                .insert(filasInsertar);
+
+            if (error) throw error;
+
+        } catch (e) {
+            console.error("Error guardando en Supabase:", e);
+        }
+
+        // WhatsApp Ticket
+        const numeroTelefono = "51988770090";
+        const lineas = [
+            "📌 *NUEVA SOLICITUD DE RESERVA*",
+            "----------------------------------",
+            `👤 *Titular:* ${titularNombre}`,
+            `🪪 *DNI Titular:* ${titularDni}`,
+            `📱 *Celular Titular:* ${titularCelular}`,
+            `🏃 *Titular Asiste:* ${titularAsiste ? 'SÍ' : 'NO (Solo compra)'}`,
+            `🗓️ *Salida:* ${tourTexto}`,
+            `👥 *Total Pasajeros Tour:* ${filasInsertar.length}`,
+            "----------------------------------",
+            "Hola, acabo de registrar los datos en la web. Adjunto la captura de mi Yape/PLIN para confirmar."
+        ];
+
+        const url = `https://api.whatsapp.com/send?phone=${numeroTelefono}&text=${encodeURIComponent(lineas.join("\n"))}`;
+        window.open(url, '_blank');
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-brands fa-whatsapp" style="font-size: 20px;"></i> Enviar Ficha por WhatsApp';
+    }
+
+    // EVENTOS
+    renderizarCamposPasajeros();
+    cargarFechasDisponibles();
+
+    document.getElementById('checkTitularVa').addEventListener('change', renderizarCamposPasajeros);
+    document.getElementById('pasajeros').addEventListener('input', () => {
+        renderizarCamposPasajeros();
+        validarPasajeros();
+    });
+
+    document.getElementById('fecha').addEventListener('change', verificarDisponibilidad);
+    document.getElementById('btnCotizar').addEventListener('click', guardarYEnviar);
+</script>
+</body>
+</html>
