@@ -1,0 +1,511 @@
+:root {
+    --rojo-carmesi: #8B1E2B;
+    --blanco-sillar: #FCFBF9;
+    --azul-colonial: #1E4B6E;
+    --amarillo-ocre: #D9822B;
+    --amarillo-ocre-hover: #BF6F1F;
+    --texto-oscuro: #2C221E;
+    --texto-suave: #635853;
+    --gris-borde: #E6E1DA;
+    --sombra-suave: 0 10px 30px -5px rgba(139, 30, 43, 0.08);
+    --sombra-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--blanco-sillar);
+    color: var(--texto-oscuro);
+    line-height: 1.6;
+}
+
+/* --- NAVBAR ESTRUCTURAL --- */
+header {
+    background-color: rgba(252, 251, 249, 0.95);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid var(--gris-borde);
+}
+
+.nav-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--rojo-carmesi);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo i { font-size: 24px; color: var(--amarillo-ocre); }
+
+.nav-links {
+    display: flex;
+    gap: 10px;
+    list-style: none;
+}
+
+.nav-tab {
+    background: transparent;
+    border: none;
+    padding: 8px 16px;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--texto-suave);
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nav-tab:hover {
+    color: var(--rojo-carmesi);
+    background-color: rgba(139, 30, 43, 0.05);
+}
+
+.nav-tab.active {
+    color: var(--rojo-carmesi);
+    background-color: rgba(139, 30, 43, 0.1);
+}
+
+/* --- HERO SECTION --- */
+.hero {
+    position: relative;
+    background: linear-gradient(rgba(30, 75, 110, 0.75), rgba(139, 30, 43, 0.85)), url('https://images.unsplash.com/photo-1589308078059-be1415eab4c3?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 42px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 18px;
+    opacity: 0.95;
+    font-weight: 400;
+}
+
+/* --- SECCIONES NAVEGABLES --- */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 50px 20px;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.4s ease-in-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.section-title h2 {
+    font-size: 32px;
+    color: var(--rojo-carmesi);
+    font-weight: 800;
+}
+
+.section-title p {
+    color: var(--azul-colonial);
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+/* --- TOURS --- */
+.tours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.tour-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+    border: 1px solid var(--gris-borde);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tour-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--sombra-suave);
+}
+
+.tour-img {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.tour-body {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.tour-badge {
+    align-self: flex-start;
+    background: rgba(30, 75, 110, 0.1);
+    color: var(--azul-colonial);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.tour-title {
+    font-size: 20px;
+    color: var(--rojo-carmesi);
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.tour-list {
+    list-style: none;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: var(--texto-suave);
+}
+
+.tour-list li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.tour-list li i {
+    color: var(--amarillo-ocre);
+    margin-top: 3px;
+}
+
+.tour-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid var(--gris-borde);
+}
+
+.tour-price {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--rojo-carmesi);
+}
+
+/* FORMULARIO Y CAMPOS DINÁMICOS */
+.booking-banner {
+    background: linear-gradient(135deg, white, #FAF6F0);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: var(--sombra-suave);
+    border: 2px solid var(--amarillo-ocre);
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.booking-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.booking-header h3 {
+    font-size: 26px;
+    color: var(--rojo-carmesi);
+    font-weight: 800;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--azul-colonial);
+    margin-bottom: 8px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--gris-borde);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--azul-colonial);
+}
+
+.titular-box {
+    background: #F4F8FA;
+    border: 2px dashed var(--azul-colonial);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.titular-title {
+    font-weight: 800;
+    color: var(--azul-colonial);
+    margin-bottom: 15px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--gris-borde);
+    margin-top: 15px;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--texto-oscuro);
+    font-size: 14px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--amarillo-ocre);
+    cursor: pointer;
+}
+
+.pasajeros-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pasajero-box {
+    background: #FFFFFF;
+    border: 1px solid var(--gris-borde);
+    border-left: 5px solid var(--amarillo-ocre);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.pasajero-title {
+    font-weight: 800;
+    color: var(--rojo-carmesi);
+    margin-bottom: 15px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.btn-cta {
+    background-color: var(--amarillo-ocre);
+    color: white;
+    border: none;
+    padding: 16px;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-cta:hover:not(:disabled) {
+    background-color: var(--amarillo-ocre-hover);
+    transform: translateY(-2px);
+}
+
+.btn-cta:disabled {
+    background-color: #D6D1CA;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.info-status {
+    font-size: 13px;
+    margin-top: 10px;
+    font-weight: 700;
+    text-align: center;
+}
+
+/* --- NOSOTROS --- */
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.about-image-stack img {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: var(--sombra-card);
+    object-fit: cover;
+}
+
+.about-text h3 {
+    color: var(--rojo-carmesi);
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.about-text p {
+    color: var(--texto-suave);
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.impact-box {
+    background: rgba(30, 75, 110, 0.06);
+    border-left: 4px solid var(--azul-colonial);
+    padding: 20px;
+    border-radius: 0 12px 12px 0;
+    margin-top: 20px;
+}
+
+.impact-box h4 {
+    color: var(--azul-colonial);
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+/* --- EGRESADOS --- */
+.graduates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.graduate-card {
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--sombra-card);
+    border: 1px solid var(--gris-borde);
+    transition: transform 0.3s ease;
+}
+
+.graduate-card:hover {
+    transform: translateY(-5px);
+}
+
+.graduate-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 15px;
+    border: 3px solid var(--amarillo-ocre);
+}
+
+.graduate-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--rojo-carmesi);
+}
+
+.graduate-career {
+    font-size: 13px;
+    color: var(--azul-colonial);
+    font-weight: 600;
+    margin-top: 3px;
+}
+
+.graduate-semester {
+    display: inline-block;
+    background: var(--blanco-sillar);
+    border: 1px solid var(--gris-borde);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: var(--texto-suave);
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+/* FOOTER */
+footer {
+    background-color: var(--texto-oscuro);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 60px;
+    font-size: 14px;
+}
+
+footer p { opacity: 0.8; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 30px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .nav-container { flex-direction: column; gap: 15px; }
+    .booking-banner { padding: 25px 20px; }
+}
