@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Personal | Arequipa Hands-On Tours</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+
+    <style>
+        body {
+            background-color: #F4F8FA;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .portal-card {
+            background: white;
+            padding: 35px 30px;
+            border-radius: 20px;
+            box-shadow: var(--sombra-card);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .roles-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .role-btn {
+            background: #FAF9F6;
+            border: 2px solid var(--gris-borde);
+            border-radius: 12px;
+            padding: 25px 15px;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            transition: all 0.2s ease;
+        }
+
+        .role-btn:hover {
+            border-color: var(--rojo-carmesi);
+            background: #FDF2F4;
+            transform: translateY(-2px);
+        }
+
+        .role-btn i {
+            font-size: 36px;
+            color: var(--azul-colonial);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .role-btn:hover i {
+            color: var(--rojo-carmesi);
+        }
+
+        .role-btn span {
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--texto-oscuro);
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="portal-card">
+    <div style="color: var(--rojo-carmesi); font-size: 24px; font-weight: 800; margin-bottom: 5px;">
+        <i class="fa-solid fa-hands-holding-circle" style="color: var(--amarillo-ocre);"></i>
+        Arequipa Hands-On
+    </div>
+    <p style="font-size: 13px; color: var(--texto-suave);">Acceso exclusivo para el equipo de trabajo</p>
+
+    <div class="roles-grid">
+        <!-- REDIRECCIÓN DIRECTA A ADMIN -->
+        <a href="admin.html" class="role-btn">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Administrador</span>
+        </a>
+        
+        <!-- REDIRECCIÓN DIRECTA A GUÍA -->
+        <a href="guia.html" class="role-btn">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>Guía / Transporte</span>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>
